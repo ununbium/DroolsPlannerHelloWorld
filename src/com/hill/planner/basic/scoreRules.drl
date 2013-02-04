@@ -1,0 +1,35 @@
+import com.hill.planner.basic.Plane;
+import org.drools.planner.core.score.constraint.ConstraintType;
+import org.drools.planner.core.score.constraint.IntConstraintOccurrence;
+import org.drools.planner.core.score.buildin.hardandsoft.HardAndSoftScoreHolder;
+
+global HardAndSoftScoreHolder scoreHolder;
+
+rule "singlePlaneTaxiRule"
+	when
+		$plane : Plane($taxiInterval1 : taxiInterval);
+		$plane2 : Plane($taxiInterval2 : taxiInterval, $taxiInterval1.overlap($taxiInterval2) != null);
+	then
+		insertLogical(new IntConstraintOccurrence("singlePlaneTaxiRule", ConstraintType.NEGATIVE_HARD,
+              			((int)$taxiInterval1.overlap($taxiInterval2).toDurationMillis()),$plane,$plane2));		             			
+end
+
+
+// Accumulate hard constraints
+rule "hardConstraintsBroken"
+        salience -1 // Do the other rules first (optional, for performance)
+    when
+        $hardTotal : Number() from accumulate(
+            IntConstraintOccurrence(constraintType == ConstraintType.NEGATIVE_HARD, $weight : weight),
+            sum($weight)
+        )
+        
+        $count : Number() from accumulate(
+            IntConstraintOccurrence(constraintType == ConstraintType.NEGATIVE_HARD, $weight : weight),
+            count($weight)
+        )
+    then
+        scoreHolder.setHardConstraintsBroken($hardTotal.intValue());
+               			
+        System.out.println("Score \t"+$hardTotal.intValue());
+end

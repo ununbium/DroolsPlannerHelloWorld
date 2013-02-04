@@ -1,0 +1,41 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<solver>
+	<environmentMode>DEBUG</environmentMode>
+
+	<!-- Define the model -->
+	<solutionClass>com.hill.planner.basic.AirportSolution</solutionClass>
+	<planningEntityClass>com.hill.planner.basic.Plane</planningEntityClass>
+
+	<!-- Define the score function -->
+	<scoreDirectorFactory>
+		<scoreDefinitionType>HARD_AND_SOFT</scoreDefinitionType>
+		<scoreDrl>/com/hill/planner/basic/scoreRules.drl</scoreDrl>
+	</scoreDirectorFactory>
+
+
+	<constructionHeuristic>
+		<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+	</constructionHeuristic>
+    
+	<localSearch>
+		<!-- Configure the optimization algorithm(s) -->
+		<termination>
+	        <terminationCompositionStyle>OR</terminationCompositionStyle>
+	        <maximumUnimprovedStepCount>500</maximumUnimprovedStepCount>
+	        <maximumSecondsSpend>60</maximumSecondsSpend>
+	    </termination>
+	
+	
+		<changeMoveSelector>
+     		<selectionOrder>ORIGINAL</selectionOrder>
+	    </changeMoveSelector>
+	    
+	    <forager>
+
+        	<minimalAcceptedSelection>10</minimalAcceptedSelection>
+
+   		</forager>
+		
+	</localSearch>
+</solver>
