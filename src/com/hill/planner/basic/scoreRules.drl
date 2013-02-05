@@ -7,11 +7,17 @@ global HardAndSoftScoreHolder scoreHolder;
 
 rule "singlePlaneTaxiRule"
 	when
-		$plane : Plane($taxiInterval1 : taxiInterval);
-		$plane2 : Plane($taxiInterval2 : taxiInterval, $taxiInterval1.overlap($taxiInterval2) != null);
+		$plane : Plane($taxiInterval1 : taxiInterval, $id : id);
+		$plane2 : Plane($taxiInterval2 : taxiInterval, id != $id);
 	then
+		int overlap = 0;
+		if($taxiInterval1.overlap($taxiInterval2)!=null)
+		{
+			overlap = ((int)$taxiInterval1.overlap($taxiInterval2).toDurationMillis());
+		}
 		insertLogical(new IntConstraintOccurrence("singlePlaneTaxiRule", ConstraintType.NEGATIVE_HARD,
-              			((int)$taxiInterval1.overlap($taxiInterval2).toDurationMillis()),$plane,$plane2));		             			
+              			overlap,$plane,$plane2));	
+
 end
 
 
@@ -23,13 +29,8 @@ rule "hardConstraintsBroken"
             IntConstraintOccurrence(constraintType == ConstraintType.NEGATIVE_HARD, $weight : weight),
             sum($weight)
         )
-        
-        $count : Number() from accumulate(
-            IntConstraintOccurrence(constraintType == ConstraintType.NEGATIVE_HARD, $weight : weight),
-            count($weight)
-        )
     then
         scoreHolder.setHardConstraintsBroken($hardTotal.intValue());
                			
-        System.out.println("Score \t"+$hardTotal.intValue());
+        //System.out.println("D Score \t"+$hardTotal.intValue());
 end

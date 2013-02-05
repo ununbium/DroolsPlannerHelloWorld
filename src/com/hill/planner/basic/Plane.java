@@ -24,10 +24,12 @@ public class Plane {
 	// planning
 	private Instant tsat = null;
 	private Duration pushback;
+	private String id;
 
-	public Plane(Instant tobt, Duration pushback) {
+	public Plane(String id, Instant tobt, Duration pushback) {
 		this.setTobt(tobt);
-		this.setTsat(tobt);		
+		this.setTsat(tobt);	
+		this.setId(id);
 		this.pushback = pushback;
 	}
 
@@ -59,7 +61,7 @@ public class Plane {
 
 	public Plane clonePlane() {
 
-		Plane clone = new Plane(tobt, pushback);
+		Plane clone = new Plane(id, tobt, pushback);
 
 		clone.setTsat(tsat);
 		return clone;
@@ -102,14 +104,24 @@ public class Plane {
 		
 		Plane other = (Plane) obj;
 		
-		if ( tsat.equals(other.tsat) &&
-				tobt.equals(other.tobt) && 
-				getTaxiInterval().equals(other.getTaxiInterval()))
+//		if ( tsat.equals(other.tsat) &&
+//				tobt.equals(other.tobt) && 
+//				getTaxiInterval().equals(other.getTaxiInterval()))
+		
+		if ( tobt.equals(other.tobt) )
 		{
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }

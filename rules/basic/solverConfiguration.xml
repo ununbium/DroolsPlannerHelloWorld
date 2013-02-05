@@ -22,19 +22,19 @@
 		<!-- Configure the optimization algorithm(s) -->
 		<termination>
 	        <terminationCompositionStyle>OR</terminationCompositionStyle>
-	        <maximumUnimprovedStepCount>500</maximumUnimprovedStepCount>
+	        <maximumUnimprovedStepCount>5</maximumUnimprovedStepCount>
 	        <maximumSecondsSpend>60</maximumSecondsSpend>
+	        <scoreAttained>0hard/0soft</scoreAttained>
 	    </termination>
 	
 	
 		<changeMoveSelector>
-     		<selectionOrder>ORIGINAL</selectionOrder>
+			<!-- Set this to ORIGINAL for extra credit: work out why is it so slow. -->
+     		<selectionOrder>RANDOM</selectionOrder>
 	    </changeMoveSelector>
 	    
 	    <forager>
-
-        	<minimalAcceptedSelection>10</minimalAcceptedSelection>
-
+        	<minimalAcceptedSelection>7</minimalAcceptedSelection>
    		</forager>
 		
 	</localSearch>
