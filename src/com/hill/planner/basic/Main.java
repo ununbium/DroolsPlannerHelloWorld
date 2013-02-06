@@ -77,18 +77,27 @@ public class Main {
 		Plane plane = null;
 		
 		long oneMinute = 60000;
-		
-		plane = new Plane("a", fmt.parseDateTime("2013/01/01 01:00").toInstant(), new Duration(oneMinute*10));
-		p.add(plane);
-		plane = new Plane("b", fmt.parseDateTime("2013/01/01 01:00").toInstant(), new Duration(oneMinute*10));
+		String id = "a";
+//		plane = new Plane("a", fmt.parseDateTime("2013/01/01 01:00").toInstant(), new Duration(oneMinute*10));
+//		p.add(plane);
+//		plane = new Plane("b", fmt.parseDateTime("2013/01/01 01:01").toInstant(), new Duration(oneMinute*12));
+//		p.add(plane);		
+//		plane = new Plane("c", fmt.parseDateTime("2013/01/01 01:10").toInstant(), new Duration(oneMinute*2));
+//		p.add(plane);
+//		plane = new Plane("d", fmt.parseDateTime("2013/01/01 01:20").toInstant(), new Duration(oneMinute*13));
+//		p.add(plane);
+//		plane = new Plane("e", fmt.parseDateTime("2013/01/01 01:30").toInstant(), new Duration(oneMinute*3));
+//		p.add(plane);		
+//		plane = new Plane("f", fmt.parseDateTime("2013/01/01 01:30").toInstant(), new Duration(oneMinute*5));
+//		p.add(plane);		
+//		plane = new Plane("g", fmt.parseDateTime("2013/01/01 01:30").toInstant(), new Duration(oneMinute*6));
+//		p.add(plane);		
+//		plane = new Plane("h", fmt.parseDateTime("2013/01/01 01:30").toInstant(), new Duration(oneMinute*10));
+//		p.add(plane);		
+		plane = new Plane("i", fmt.parseDateTime("2013/01/01 01:30").toInstant(), new Duration(oneMinute*7));
 		p.add(plane);		
-		plane = new Plane("c", fmt.parseDateTime("2013/01/01 01:00").toInstant(), new Duration(oneMinute*10));
+		plane = new Plane("j", fmt.parseDateTime("2013/01/01 01:30").toInstant(), new Duration(oneMinute*4));
 		p.add(plane);
-		plane = new Plane("d", fmt.parseDateTime("2013/01/01 01:00").toInstant(), new Duration(oneMinute*10));
-		p.add(plane);
-		plane = new Plane("e", fmt.parseDateTime("2013/01/01 01:00").toInstant(), new Duration(oneMinute*10));
-		p.add(plane);		
-		plane = new Plane("f", fmt.parseDateTime("2013/01/01 01:00").toInstant(), new Duration(oneMinute*10));
 		
 		AirportSolution a = new AirportSolution(p);
 		

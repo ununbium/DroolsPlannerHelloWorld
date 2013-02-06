@@ -1,4 +1,5 @@
 import com.hill.planner.basic.Plane;
+import org.joda.time.Interval;
 import org.drools.planner.core.score.constraint.ConstraintType;
 import org.drools.planner.core.score.constraint.IntConstraintOccurrence;
 import org.drools.planner.core.score.buildin.hardandsoft.HardAndSoftScoreHolder;
@@ -13,11 +14,24 @@ rule "singlePlaneTaxiRule"
 		int overlap = 0;
 		if($taxiInterval1.overlap($taxiInterval2)!=null)
 		{
-			overlap = ((int)$taxiInterval1.overlap($taxiInterval2).toDurationMillis());
+			overlap = ((int)$taxiInterval1.overlap($taxiInterval2).toDurationMillis()/1000);
 		}
 		insertLogical(new IntConstraintOccurrence("singlePlaneTaxiRule", ConstraintType.NEGATIVE_HARD,
               			overlap,$plane,$plane2));	
+end
 
+//Potential vlaue pool is shared, need a hard constraint
+
+rule "minimiseDelayRule"
+	when
+		$plane : Plane($tobt : tobt, $tsat : tsat != null);
+	then
+		//System.out.println("tobt "+$tobt + " tsat "+$tsat);
+		
+		long delay = (int) (new Interval($tobt, $tsat).toDurationMillis())/10000;
+
+		insertLogical(new IntConstraintOccurrence("singlePlaneTaxiRule", ConstraintType.NEGATIVE_HARD,
+              			delay,$plane));	
 end
 
 
@@ -32,5 +46,19 @@ rule "hardConstraintsBroken"
     then
         scoreHolder.setHardConstraintsBroken($hardTotal.intValue());
                			
-        //System.out.println("D Score \t"+$hardTotal.intValue());
+        //System.out.println("H Score \t"+$hardTotal.intValue());
+end
+
+// Accumulate hard constraints
+rule "softConstraintsBroken"
+        salience -1 // Do the other rules first (optional, for performance)
+    when
+        $softTotal : Number() from accumulate(
+            IntConstraintOccurrence(constraintType == ConstraintType.NEGATIVE_SOFT, $weight : weight),
+            sum($weight)
+        )
+    then
+        scoreHolder.setSoftConstraintsBroken($softTotal.intValue());
+               			
+        //System.out.println("S Score \t"+$softTotal.intValue());
 end

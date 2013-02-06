@@ -27,7 +27,7 @@ public class Plane {
 	private String id;
 
 	public Plane(String id, Instant tobt, Duration pushback) {
-		this.setTobt(tobt);
+		this.tobt = tobt;
 		this.setTsat(tobt);	
 		this.setId(id);
 		this.pushback = pushback;
@@ -45,16 +45,22 @@ public class Plane {
 
 	/**
 	 * List all considerable instants
+	 * 
+	 * TODO move this to AIRPORT
 	 */
 	public List<Instant> getTsatOptions() {
+		//System.out.println("getOptions");
+		
 		List<Instant> availableTimes = new ArrayList<Instant>();
-
-		for (int i = 0; i < MAX_INCREMENTS; i++) {
-			Instant candidateTime = getTobt().plus(
-					TIME_INCREMENT.getMillis() * i);
-
-			availableTimes.add(candidateTime);
-			//System.out.println("available: "+ candidateTime + "from x :"+TIME_INCREMENT.getMillis()+ " times y:"+MAX_INCREMENTS);
+		if(id.equals("a"))
+		{
+			for (int i = 0; i < MAX_INCREMENTS; i++) {
+				Instant candidateTime = getTobt().plus(
+						TIME_INCREMENT.getMillis() * i);
+	
+				availableTimes.add(candidateTime);
+				//System.out.println("available: "+ candidateTime + "from x :"+TIME_INCREMENT.getMillis()+ " times y:"+MAX_INCREMENTS);
+			}
 		}
 		return availableTimes;
 	}
@@ -72,10 +78,6 @@ public class Plane {
 	public Instant getTobt() {
 		return tobt;
 	}
-
-	public void setTobt(Instant tobt) {
-		this.tobt = tobt;
-	}
 	
 	public Interval getTaxiInterval()
 	{
@@ -91,6 +93,7 @@ public class Plane {
 		
 		s += tobt.hashCode();
 		s += pushback.hashCode();
+		s += id.hashCode();
 		
 		return s;
 	}
@@ -108,7 +111,7 @@ public class Plane {
 //				tobt.equals(other.tobt) && 
 //				getTaxiInterval().equals(other.getTaxiInterval()))
 		
-		if ( tobt.equals(other.tobt) )
+		if ( tobt.equals(other.tobt) && id.equals(other.id))
 		{
 			return true;
 		} else {

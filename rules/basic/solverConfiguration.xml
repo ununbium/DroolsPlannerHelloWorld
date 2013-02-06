@@ -17,25 +17,28 @@
 	<constructionHeuristic>
 		<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
 	</constructionHeuristic>
-    
+
 	<localSearch>
 		<!-- Configure the optimization algorithm(s) -->
 		<termination>
-	        <terminationCompositionStyle>OR</terminationCompositionStyle>
-	        <maximumUnimprovedStepCount>5</maximumUnimprovedStepCount>
-	        <maximumSecondsSpend>60</maximumSecondsSpend>
-	        <scoreAttained>0hard/0soft</scoreAttained>
-	    </termination>
-	
-	
+			<terminationCompositionStyle>OR</terminationCompositionStyle>
+			<maximumUnimprovedStepCount>10</maximumUnimprovedStepCount>
+			<maximumSecondsSpend>10</maximumSecondsSpend>
+			<scoreAttained>0hard/0soft</scoreAttained>
+		</termination>
+
 		<changeMoveSelector>
 			<!-- Set this to ORIGINAL for extra credit: work out why is it so slow. -->
-     		<selectionOrder>RANDOM</selectionOrder>
-	    </changeMoveSelector>
-	    
-	    <forager>
-        	<minimalAcceptedSelection>7</minimalAcceptedSelection>
-   		</forager>
-		
+			<selectionOrder>RANDOM</selectionOrder>
+			
+			<valueSelector>
+				<valueFilterClass>com.hill.planner.basic.FutureTSATSwapMoveFilter</valueFilterClass>
+			</valueSelector>
+		</changeMoveSelector>
+
+		<forager>
+			<minimalAcceptedSelection>100</minimalAcceptedSelection>
+		</forager>
+
 	</localSearch>
 </solver>
