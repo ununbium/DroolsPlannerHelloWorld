@@ -7,6 +7,7 @@ import org.drools.planner.core.score.buildin.hardandsoft.HardAndSoftScoreHolder;
 global HardAndSoftScoreHolder scoreHolder;
 
 rule "singlePlaneTaxiRule"
+//one plane can be taxing or taking off at any given time
 	when
 		$plane : Plane($taxiInterval1 : taxiInterval, $id : id);
 		$plane2 : Plane($taxiInterval2 : taxiInterval, id != $id);
@@ -17,22 +18,29 @@ rule "singlePlaneTaxiRule"
 			overlap = ((int)$taxiInterval1.overlap($taxiInterval2).toDurationMillis()/1000);
 		}
 		insertLogical(new IntConstraintOccurrence("singlePlaneTaxiRule", ConstraintType.NEGATIVE_HARD,
-              			overlap,$plane,$plane2));	
+             			overlap,$plane,$plane2));
+
 end
 
-//Potential vlaue pool is shared, need a hard constraint
+rule "tsatAfterTTOTRule"
+	when
+		$plane : Plane($tobt : tobt, $tsat : tsat != null && $tsat.isBefore($tobt));
+	then
+		int difference = (int) (new Interval($tsat, $tobt).toDurationMillis())/10000;
+		
+		insertLogical(new IntConstraintOccurrence("tsatAfterTTOTRule", ConstraintType.NEGATIVE_HARD,
+             			difference,$plane));
+end
 
 rule "minimiseDelayRule"
 	when
-		$plane : Plane($tobt : tobt, $tsat : tsat != null);
-	then
-		//System.out.println("tobt "+$tobt + " tsat "+$tsat);
-		
-		long delay = (int) (new Interval($tobt, $tsat).toDurationMillis())/10000;
-
-		insertLogical(new IntConstraintOccurrence("singlePlaneTaxiRule", ConstraintType.NEGATIVE_HARD,
+		$plane : Plane($tobt : tobt, $tsat : tsat != null, $tobt.isBefore($tsat));
+	then		
+		int delay = (int) (new Interval($tobt, $tsat).toDurationMillis());
+		insertLogical(new IntConstraintOccurrence("minimiseDelayRule", ConstraintType.NEGATIVE_SOFT,
               			delay,$plane));	
 end
+
 
 
 // Accumulate hard constraints

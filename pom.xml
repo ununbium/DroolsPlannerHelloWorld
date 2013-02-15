@@ -21,19 +21,19 @@
 	</build>
 
 	<dependencies>
-		
-		<dependency>
+
+ 		<dependency>
 			<groupId>org.drools.planner</groupId>
-			<artifactId>drools-planner-core</artifactId>
+			<artifactId>drools-planner-core</artifactId> 
 			<version>5.5.0.Final</version>
-		</dependency>
-		
+		</dependency> 
+
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 			<version>2.1</version>
 		</dependency>
-		
+
 	</dependencies>
 
 </project>

@@ -21,24 +21,26 @@
 	<localSearch>
 		<!-- Configure the optimization algorithm(s) -->
 		<termination>
-			<terminationCompositionStyle>OR</terminationCompositionStyle>
-			<maximumUnimprovedStepCount>10</maximumUnimprovedStepCount>
-			<maximumSecondsSpend>10</maximumSecondsSpend>
+			<terminationCompositionStyle>OR</terminationCompositionStyle>			
+			<maximumSecondsSpend>20</maximumSecondsSpend>
+	        <maximumStepCount>8</maximumStepCount>
 			<scoreAttained>0hard/0soft</scoreAttained>
 		</termination>
 
 		<changeMoveSelector>
-			<!-- Set this to ORIGINAL for extra credit: work out why is it so slow. -->
 			<selectionOrder>RANDOM</selectionOrder>
 			
-			<valueSelector>
+			<!-- doco suggests this works but it does not in 5.5.0 --> 
+			<!-- <valueSelector>
 				<valueFilterClass>com.hill.planner.basic.FutureTSATSwapMoveFilter</valueFilterClass>
-			</valueSelector>
+			</valueSelector> -->
 		</changeMoveSelector>
 
 		<forager>
-			<minimalAcceptedSelection>100</minimalAcceptedSelection>
+			<minimalAcceptedSelection>500</minimalAcceptedSelection>
+			<!-- <pickEarlyType>FIRST_BEST_SCORE_IMPROVING</pickEarlyType> -->
 		</forager>
 
-	</localSearch>
+	</localSearch>		
+	
 </solver>

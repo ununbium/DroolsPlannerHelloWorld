@@ -15,7 +15,7 @@ import org.joda.time.Interval;
 @PlanningEntity
 public class Plane {
 
-	private static final Duration TIME_INCREMENT = new Duration(60000*1);
+	private static final Duration TIME_INCREMENT = new Duration(60000 * 1);
 	private static final int MAX_INCREMENTS = 60; // one hour maximum
 
 	// identity
@@ -28,41 +28,19 @@ public class Plane {
 
 	public Plane(String id, Instant tobt, Duration pushback) {
 		this.tobt = tobt;
-		this.setTsat(tobt);	
+		this.setTsat(tobt);
 		this.setId(id);
 		this.pushback = pushback;
 	}
 
 	@PlanningVariable
-	@ValueRange(type = ValueRangeType.FROM_PLANNING_ENTITY_PROPERTY, planningEntityProperty = "tsatOptions")
+	@ValueRange(type = ValueRangeType.FROM_SOLUTION_PROPERTY, solutionProperty = "tsatOptions")
 	public Instant getTsat() {
 		return tsat;
 	}
 
 	public void setTsat(Instant tsat) {
 		this.tsat = tsat;
-	}
-
-	/**
-	 * List all considerable instants
-	 * 
-	 * TODO move this to AIRPORT
-	 */
-	public List<Instant> getTsatOptions() {
-		//System.out.println("getOptions");
-		
-		List<Instant> availableTimes = new ArrayList<Instant>();
-		if(id.equals("a"))
-		{
-			for (int i = 0; i < MAX_INCREMENTS; i++) {
-				Instant candidateTime = getTobt().plus(
-						TIME_INCREMENT.getMillis() * i);
-	
-				availableTimes.add(candidateTime);
-				//System.out.println("available: "+ candidateTime + "from x :"+TIME_INCREMENT.getMillis()+ " times y:"+MAX_INCREMENTS);
-			}
-		}
-		return availableTimes;
 	}
 
 	public Plane clonePlane() {
@@ -72,47 +50,42 @@ public class Plane {
 		clone.setTsat(tsat);
 		return clone;
 	}
-	
-	
 
 	public Instant getTobt() {
 		return tobt;
 	}
-	
-	public Interval getTaxiInterval()
-	{
+
+	public Interval getTaxiInterval() {
 		Interval i = new Interval(tsat, tsat.plus(pushback));
-		
-//		System.out.println("got taxi interval " + i);
+
+		// System.out.println("got taxi interval " + i);
 		return i;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		Integer s = super.hashCode();
-		
+
 		s += tobt.hashCode();
 		s += pushback.hashCode();
 		s += id.hashCode();
-		
+
 		return s;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Plane))
-		{
+		if (!(obj instanceof Plane)) {
 			return false;
 		}
-		
+
 		Plane other = (Plane) obj;
-		
-//		if ( tsat.equals(other.tsat) &&
-//				tobt.equals(other.tobt) && 
-//				getTaxiInterval().equals(other.getTaxiInterval()))
-		
-		if ( tobt.equals(other.tobt) && id.equals(other.id))
-		{
+
+		// if ( tsat.equals(other.tsat) &&
+		// tobt.equals(other.tobt) &&
+		// getTaxiInterval().equals(other.getTaxiInterval()))
+
+		if (tobt.equals(other.tobt) && id.equals(other.id)) {
 			return true;
 		} else {
 			return false;

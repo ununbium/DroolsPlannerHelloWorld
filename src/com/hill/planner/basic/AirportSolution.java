@@ -4,15 +4,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.drools.planner.api.domain.entity.PlanningEntity;
 import org.drools.planner.api.domain.solution.PlanningEntityCollectionProperty;
 import org.drools.planner.core.score.buildin.hardandsoft.HardAndSoftScore;
 import org.drools.planner.core.solution.Solution;
+import org.joda.time.Duration;
+import org.joda.time.Instant;
 
 
 public class AirportSolution implements Solution<HardAndSoftScore> {
 
-	private HardAndSoftScore score;
+	private HardAndSoftScore score; 
 	
 	private List<Plane> planPlanes = new ArrayList<Plane>();
 
@@ -38,9 +39,6 @@ public class AirportSolution implements Solution<HardAndSoftScore> {
 		this.planPlanes = planes;
 	}
 	
-	
-	
-	
 	@Override
 	public HardAndSoftScore getScore() {
 		return score;
@@ -49,6 +47,39 @@ public class AirportSolution implements Solution<HardAndSoftScore> {
 	@Override
 	public void setScore(HardAndSoftScore score) {
 		this.score = score;
+	}
+	
+	public List<Instant> getTsatOptions()
+	{
+		Instant earliest = planPlanes.get(0).getTobt();
+		Instant latest = planPlanes.get(0).getTobt();
+		List<Instant> result = new ArrayList<Instant>();
+		
+		for(Plane p : planPlanes)
+		{
+			if(p.getTobt().isBefore(earliest))
+			{
+				earliest = p.getTobt();
+			}
+			
+			if(p.getTobt().isAfter(latest))
+			{
+				latest = p.getTobt();
+			}
+		}		
+		
+		Instant candidate = earliest;
+		result.add(candidate); // add first time as a candidate
+		
+		//add each minute from earliest to latest
+		while(candidate.isBefore(latest.plus(new Duration(1000*60*60)))) //should be latest + hour
+		{
+			candidate = candidate.plus(new Duration(1000*60)); //last plus one minute
+			result.add(candidate);
+		}	
+		
+		return result;
+		
 	}
 
 	@Override
@@ -89,11 +120,13 @@ public class AirportSolution implements Solution<HardAndSoftScore> {
 	public String toString() {
 		String returnValue = "";
 		
-		returnValue += "TOBT \t TSAT \t Interval \n";
+		returnValue += "ID \t TOBT \t TSAT \t Interval \t Offblock delay \n";
 		
 		for(Plane p :planPlanes)
 		{
-			returnValue += p.getTobt() +"\t"+p.getTsat()+"\t"+p.getTaxiInterval()+"\t\n";			
+			Long duration = new Duration(p.getTobt(), p.getTsat()).getStandardSeconds();
+			
+			returnValue += p.getId()+"\t"+p.getTobt() +"\t"+p.getTsat()+"\t"+p.getTaxiInterval()+"\t"+duration+"\t\n";			
 		}
 		
 		
