@@ -13,12 +13,17 @@
 		<scoreDrl>/com/hill/planner/basic/scoreRules.drl</scoreDrl>
 	</scoreDirectorFactory>
 
-
 	<constructionHeuristic>
 		<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
 	</constructionHeuristic>
 
+	<!-- 
+		You can have multiple local searches with different setups. 
+		If this is the case, you can also have a top level Termination, 
+		e.g. having a maximum time spend for the solver as a whole. 
+	-->
 	<localSearch>
+	
 		<!-- Configure the optimization algorithm(s) -->
 		<termination>
 			<terminationCompositionStyle>OR</terminationCompositionStyle>			
@@ -38,7 +43,6 @@
 
 		<forager>
 			<minimalAcceptedSelection>500</minimalAcceptedSelection>
-			<!-- <pickEarlyType>FIRST_BEST_SCORE_IMPROVING</pickEarlyType> -->
 		</forager>
 
 	</localSearch>		
