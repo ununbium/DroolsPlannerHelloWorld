@@ -36,7 +36,7 @@ rule "minimiseDelayRule"
 	when
 		$plane : Plane($tobt : tobt, $tsat : tsat != null, $tobt.isBefore($tsat));
 	then		
-		int delay = (int) (new Interval($tobt, $tsat).toDurationMillis());
+		int delay = (int) (new Interval($tobt, $tsat).toDuration().getStandardSeconds());
 		insertLogical(new IntConstraintOccurrence("minimiseDelayRule", ConstraintType.NEGATIVE_SOFT,
               			delay,$plane));	
 end
@@ -57,9 +57,9 @@ rule "hardConstraintsBroken"
         //System.out.println("H Score \t"+$hardTotal.intValue());
 end
 
-// Accumulate hard constraints
+// Accumulate soft constraints
 rule "softConstraintsBroken"
-        salience -1 // Do the other rules first (optional, for performance)
+        salience -2 // Do the other rules first (optional, for performance)
     when
         $softTotal : Number() from accumulate(
             IntConstraintOccurrence(constraintType == ConstraintType.NEGATIVE_SOFT, $weight : weight),

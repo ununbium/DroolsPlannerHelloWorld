@@ -1,30 +1,29 @@
 package com.hill.planner.basic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.drools.planner.api.domain.entity.PlanningEntity;
 import org.drools.planner.api.domain.variable.PlanningVariable;
 import org.drools.planner.api.domain.variable.ValueRange;
 import org.drools.planner.api.domain.variable.ValueRangeType;
-
 import org.joda.time.Duration;
 import org.joda.time.Instant;
 import org.joda.time.Interval;
 
+/**
+ * This annotation allows Planner to recognise this class as something that it
+ * should care about. As you can see there is nearly no fuctionality implemented
+ * herein.
+ * 
+ */
 @PlanningEntity
 public class Plane {
-
-	private static final Duration TIME_INCREMENT = new Duration(60000 * 1);
-	private static final int MAX_INCREMENTS = 60; // one hour maximum
-
-	// identity
-	private Instant tobt = null;
+	// identity - allows us to make sure that we don't do silly things like
+	// comparing an instance with itself.
+	private String id;
 
 	// planning
 	private Instant tsat = null;
 	private Duration pushback;
-	private String id;
+	private Instant tobt = null;
 
 	public Plane(String id, Instant tobt, Duration pushback) {
 		this.tobt = tobt;
@@ -33,6 +32,26 @@ public class Plane {
 		this.pushback = pushback;
 	}
 
+	/**
+	 * Here we are telling Drools planner;
+	 * 
+	 * <ol>
+	 * <li>where to get the solutions with the @valueRange- the
+	 * "FROM_SOLUTION_PROPERTY" tells the planner to use the airports property
+	 * tsatOptions. Planner will call "getTsatOptions()" on the Airport class</li>
+	 * 
+	 * <li>
+	 * That this property (tsat) is a Planning variable - I.e. a value that it
+	 * can change the value of. You can have as many of these as you like, but
+	 * obviously constraining the possible number of solutions is highly
+	 * advisable, so don't go crazy - pick planning variables carefully</li>
+	 * </ol>
+	 * 
+	 * Other than that - it is a simple property. You can out the annotations
+	 * below on either the getter or the setter.
+	 * 
+	 * @return
+	 */
 	@PlanningVariable
 	@ValueRange(type = ValueRangeType.FROM_SOLUTION_PROPERTY, solutionProperty = "tsatOptions")
 	public Instant getTsat() {
@@ -43,12 +62,12 @@ public class Plane {
 		this.tsat = tsat;
 	}
 
-	public Plane clonePlane() {
+	public String getId() {
+		return id;
+	}
 
-		Plane clone = new Plane(id, tobt, pushback);
-
-		clone.setTsat(tsat);
-		return clone;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public Instant getTobt() {
@@ -57,8 +76,6 @@ public class Plane {
 
 	public Interval getTaxiInterval() {
 		Interval i = new Interval(tsat, tsat.plus(pushback));
-
-		// System.out.println("got taxi interval " + i);
 		return i;
 	}
 
@@ -92,12 +109,17 @@ public class Plane {
 		}
 	}
 
-	public String getId() {
-		return id;
-	}
+	/**
+	 * Deep clone this instance.
+	 * 
+	 * @return clone of this
+	 */
+	public Plane clonePlane() {
 
-	public void setId(String id) {
-		this.id = id;
+		Plane clone = new Plane(id, tobt, pushback);
+
+		clone.setTsat(tsat);
+		return clone;
 	}
 
 }

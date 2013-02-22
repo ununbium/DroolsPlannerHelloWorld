@@ -11,34 +11,40 @@ import org.drools.planner.core.score.Score;
 import org.drools.planner.core.score.director.ScoreDirector;
 import org.drools.planner.core.score.director.ScoreDirectorFactory;
 
+/**
+ * This is a simple class that neatly wraps up the drools initialisation and
+ * allows us to periodically output the score - you don't have to worry about
+ * this if your looking for a Drools planner introduction. 
+ */
 public class DroolsRunner {
 	private AirportSolution planningProblem = null;
 	private Solver solver = null;
 	private boolean solving = false;
 
-	public DroolsRunner(AirportSolution planningProblem) throws FileNotFoundException {
+	public DroolsRunner(AirportSolution planningProblem)
+			throws FileNotFoundException {
 		this.planningProblem = planningProblem;
-		
+
 		File f = new File("./rules/basic/solverConfiguration.xml");
 
 		XmlSolverFactory solverFactory = new XmlSolverFactory();
 
 		InputStream s = new FileInputStream(f);
 		solverFactory.configure(s);
-		
+
 		solver = solverFactory.buildSolver();
 	}
 
-	public AirportSolution solve()  {
+	public AirportSolution solve() {
 
 		solver.setPlanningProblem(planningProblem);
 
 		this.solving = true;
 
 		runPrinterThread();
-		
+
 		solver.solve();
-		
+
 		this.solving = false;
 
 		AirportSolution bestSolution = (AirportSolution) solver
@@ -49,7 +55,8 @@ public class DroolsRunner {
 	}
 
 	/**
-	 * Simple thread to give some insight into the score changing over time - not necessary.
+	 * Simple thread to give some insight into the score changing over time -
+	 * not necessary.
 	 */
 	private void runPrinterThread() {
 		Thread scorePrinter = new Thread() {
@@ -64,7 +71,8 @@ public class DroolsRunner {
 				while (solving) {
 					try {
 						Thread.sleep(1000);
-					} catch (InterruptedException e) {}
+					} catch (InterruptedException e) {
+					}
 
 					guiScoreDirector.setWorkingSolution(solver
 							.getBestSolution());
