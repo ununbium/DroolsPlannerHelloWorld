@@ -34,11 +34,6 @@
 
 		<changeMoveSelector>
 			<selectionOrder>RANDOM</selectionOrder>
-
-			<!-- doco suggests this works but it does not in 5.5.0 -->
-			<!-- <valueSelector>
-				<valueFilterClass>main.java.com.hill.planner.basic.FutureTSATSwapMoveFilter</valueFilterClass>
-			</valueSelector> -->
 		</changeMoveSelector>
 
 		<forager>

@@ -98,10 +98,6 @@ public class Plane {
 
 		Plane other = (Plane) obj;
 
-		// if ( tsat.equals(other.tsat) &&
-		// tobt.equals(other.tobt) &&
-		// getTaxiInterval().equals(other.getTaxiInterval()))
-
 		if (tobt.equals(other.tobt) && id.equals(other.id)) {
 			return true;
 		} else {
