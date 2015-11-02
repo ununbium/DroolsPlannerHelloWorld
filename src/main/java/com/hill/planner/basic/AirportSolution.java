@@ -25,9 +25,6 @@ public class AirportSolution implements Solution<HardAndSoftScore> {
 	 * 
 	 * @param planPlanes
 	 *            - planes that need TSATs calculating
-	 * @param factPlanes
-	 *            - planes that have exited the planning window, but may need to
-	 *            be accounted for
 	 */
 	public AirportSolution(List<Plane> planPlanes) {
 		this.planPlanes.addAll(planPlanes);
