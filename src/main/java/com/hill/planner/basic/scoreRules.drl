@@ -26,7 +26,7 @@ rule "tsatAfterTTOTRule"
 	when
 		$plane : Plane($tobt : tobt, $tsat : tsat != null && $tsat.isBefore($tobt));
 	then
-		int difference = (int) (new Interval($tsat, $tobt).toDurationMillis())/10000;
+		int difference = (int) (new Interval($tsat, $tobt).toDurationMillis())/1000;
 		
 		insertLogical(new IntConstraintOccurrence("tsatAfterTTOTRule", ConstraintType.NEGATIVE_HARD,
              			difference,$plane));
